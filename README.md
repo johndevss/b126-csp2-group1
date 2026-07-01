@@ -1,9 +1,4 @@
 # Barangay Healthcare Appointment System
-
-TESDA NCIII Capstone Project — CLI-based appointment management system for a Barangay Health Center.
-
-This README is your "runbook" — follow it top to bottom on a fresh machine and you should end up with a working local dev environment.
-
 ---
 
 ## Prerequisites
