@@ -47,23 +47,14 @@ public class EnvLoader {
         } catch (IOException e) {
             System.err.println("[EnvLoader] Could not find .env file in project root.");
             System.err.println("[EnvLoader] Copy .env.example to .env and fill in your DB credentials.");
-            // We don't crash here — DBConnection will fail with a clearer error later.
         }
     }
 
-    /**
-     * Get a value from .env by key.
-     * Example: EnvLoader.get("DB_HOST")
-     */
     public static String get(String key) {
-        load(); // make sure it's loaded before anyone reads from it
+        load(); 
         return envMap.get(key);
     }
 
-    /**
-     * Same as get(), but returns a fallback value if the key is missing.
-     * Useful for optional settings.
-     */
     public static String get(String key, String defaultValue) {
         String value = get(key);
         return (value == null || value.isEmpty()) ? defaultValue : value;
