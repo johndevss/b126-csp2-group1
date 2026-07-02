@@ -35,12 +35,12 @@ public class ConsultationService {
             throw new IllegalStateException("Can only consult patients who are currently marked as 'arrived'.");
         }
 
-        // 3. Create a new consultation record and save it to the database
+        // Create a new consultation record and save it to the database
         ConsultationRecord record = new ConsultationRecord(appointmentId, recordedBy, notes);
         ConsultationRecord savedRecord = consultationRecordRepository.save(record);
 
         if (savedRecord != null) {
-            // 4. Update the parent appointment lifecycle column status to 'consulted'
+            // Update the parent appointment lifecycle column status to 'consulted'
             appointmentRepository.updateStatus(appointmentId, "consulted");
         }
 
