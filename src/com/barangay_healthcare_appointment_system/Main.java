@@ -1,11 +1,11 @@
 package com.barangay_healthcare_appointment_system;
 
-import com.barangay_healthcare_appointment_system.config.DBConnection;
+import com.barangay_healthcare_appointment_system.view.MainMenuView;
 
 public class Main {
     public static void main(String[] args) {
+        MainMenuView app = new MainMenuView();
         
-        // Test the database connection
-        DBConnection.testConnection();
+        app.start();
     }
 }
