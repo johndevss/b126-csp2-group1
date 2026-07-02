@@ -15,19 +15,12 @@ public class AuthService {
      * @return The authenticated User object if valid, or null if login fails.
      */
     public User login(String username, String password) {
-        // Quick input guard
-        if (username == null || username.isBlank() || password == null || password.isBlank()) {
-            return null;
+        User user = userRepository.findByCredentials(username, password);
+
+        if (user != null) {
+            return user; // Login successful!
         }
 
-        // Fetch user from the DB by their unique username
-        User user = userRepository.findByUsername(username);
-
-        // Check if user exists and password matches
-        if (user != null && user.getPassword().equals(password)) {
-            return user; 
-        }
-
-        return null;
+        return null; // Login failed
     }
 }

@@ -14,16 +14,16 @@ public class UserRepository {
 
     public User save(User user) {
         String sql = "INSERT INTO users (first_name, middle_name, last_name, username, password, role) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, SHA2(?, 256), ?)";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getMiddleName());
             stmt.setString(3, user.getLastName());
             stmt.setString(4, user.getUsername());
-            stmt.setString(5, user.getPassword()); // AuthService hashes this BEFORE it gets here
+            stmt.setString(5, user.getPassword()); // Pass the plain text; MySQL hashes it!
             stmt.setString(6, user.getRole());
 
             stmt.executeUpdate();
@@ -83,6 +83,29 @@ public class UserRepository {
         }
 
         return null; 
+    }
+
+    public User findByCredentials(String username, String password) {
+    // MySQL hashes the incoming plain-text password attempt and compares it to the DB hash
+        String sql = "SELECT * FROM users WHERE username = ? AND password = SHA2(?, 256)";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapRowToUser(rs);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("[UserRepository] Authentication query failed: " + e.getMessage());
+        }
+
+        return null; // Returns null if username doesn't exist OR password doesn't match
     }
 
     public List<User> findAll() {

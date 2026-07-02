@@ -71,6 +71,14 @@ CREATE TABLE IF NOT EXISTS consultation_records (
     FOREIGN KEY (recorded_by) REFERENCES users(id)
 );
 
+-- 7. Seed data: Users with automatically encrypted passwords
+INSERT INTO users (first_name, middle_name, last_name, username, password, role) VALUES
+    ('Raymond', NULL, 'Tobias', 'raymond_admin', SHA2('admin123', 256), 'admin'),
+    ('Ashley Eunice', NULL, 'Cruz', 'ashley_nurse', SHA2('staff123', 256), 'staff'),
+    ('Fredper', NULL, 'Sentes', 'fredper_doc', SHA2('doctor123', 256), 'doctor'),
+    ('John Emmanuel', NULL, 'Calderon', 'john_doc', SHA2('doctor123', 256), 'doctor'),
+    ('Bea', NULL, 'Gorospe', 'bea_midwife', SHA2('midwife123', 256), 'midwife');
+    
 -- Seed data: services + their schedule days (from the project doc)
 INSERT INTO services (name) VALUES
     ('General Checkup'),
