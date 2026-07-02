@@ -29,7 +29,7 @@ public class DBConnection {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static void main(String[] args) {
+    public static void testConnection() {
         try (Connection conn = getConnection()) {
             System.out.println("Connected successfully to: " + URL);
         } catch (SQLException e) {
