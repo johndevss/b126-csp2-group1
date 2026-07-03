@@ -44,23 +44,39 @@ public class UserRepository {
 
     public User findById(int id) {
         String sql = "SELECT * FROM users WHERE id = ?";
-
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
             stmt.setInt(1, id);
-
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return mapRowToUser(rs);
                 }
             }
-
         } catch (SQLException e) {
-            System.err.println("[UserRepository] Failed to find user: " + e.getMessage());
+            System.err.println("[UserRepository] Failed to find user by ID: " + e.getMessage());
         }
-
         return null;
+    }
+
+    public boolean update(User user) {
+        String sql = "UPDATE users SET first_name = ?, middle_name = ?, last_name = ?, " +
+                    "password = ?, role = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, user.getFirstName());
+            stmt.setString(2, user.getMiddleName());
+            stmt.setString(3, user.getLastName());
+            stmt.setString(4, user.getPassword()); // Accepts the BCrypt hash string directly
+            stmt.setString(5, user.getRole());
+            stmt.setInt(6, user.getId());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UserRepository] Target row failed to update: " + e.getMessage());
+            return false;
+        }
     }
 
 

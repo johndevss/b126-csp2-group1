@@ -71,13 +71,13 @@ CREATE TABLE IF NOT EXISTS consultation_records (
     FOREIGN KEY (recorded_by) REFERENCES users(id)
 );
 
--- 7. Seed data: Users with automatically encrypted passwords
+-- 7. Seed data: Users with BCrypt encrypted passwords
 INSERT INTO users (first_name, middle_name, last_name, username, password, role) VALUES
-    ('Raymond', NULL, 'Tobias', 'raymond_admin', SHA2('admin123', 256), 'admin'),
-    ('Ashley Eunice', NULL, 'Cruz', 'ashley_nurse', SHA2('staff123', 256), 'staff'),
-    ('Fredper', NULL, 'Sentes', 'fredper_doc', SHA2('doctor123', 256), 'doctor'),
-    ('John Emmanuel', NULL, 'Calderon', 'john_doc', SHA2('doctor123', 256), 'doctor'),
-    ('Bea', NULL, 'Gorospe', 'bea_midwife', SHA2('midwife123', 256), 'midwife');
+    ('Raymond', NULL, 'Tobias', 'raymond_admin', '$2a$10$l3KsHG/Toj.e/xxHO589HuDQyM7jaA7o77sbuPTXvH1abr.6U6.Eu', 'admin'),
+    ('Ashley Eunice', NULL, 'Cruz', 'ashley_nurse', '$2a$10$g0UTpiKnw.3DPMqUNTxp9OR6shGZft4tJQq/CO6xyC0Jl4.YZYSoW', 'staff'),
+    ('Fredper', NULL, 'Sentes', 'fredper_doc', '$2a$10$dwZzpm.ba6MkdaYLAtZcN.pm12rwxDaiZv.CRs0UU1K1YTZNKXeQe', 'doctor'),
+    ('John Emmanuel', NULL, 'Calderon', 'john_doc', '$2a$10$dwZzpm.ba6MkdaYLAtZcN.pm12rwxDaiZv.CRs0UU1K1YTZNKXeQe', 'doctor'),
+    ('Bea', NULL, 'Gorospe', 'bea_midwife', '$2a$10$O/wLQSreC4ROenMKK9tJw.naEXXeabKrp2k5ruCn5BpU9m2i.rXsC', 'midwife');
     
 -- Seed data: services + their schedule days (from the project doc)
 INSERT INTO services (name) VALUES
