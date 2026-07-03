@@ -45,7 +45,7 @@ public class ProviderController {
      * @throws IllegalArgumentException or IllegalStateException if the target ticket status isn't 'arrived'
      */
     public ConsultationRecord completeConsultation(int appointmentId, int providerId, String notes) {
-        if (notes == null || notes.isBlank()) {
+        if (notes == null || notes.trim().isEmpty()) {
             throw new IllegalArgumentException("Consultation notes cannot be empty.");
         }
         

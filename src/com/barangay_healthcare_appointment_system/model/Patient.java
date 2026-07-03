@@ -114,7 +114,7 @@ public class Patient {
     }
 
     public String getFullName() {
-        if (middleName == null || middleName.isBlank()) {
+        if (middleName == null || middleName.trim().isEmpty()) {
             return firstName + " " + lastName;
         }
         return firstName + " " + middleName + " " + lastName;

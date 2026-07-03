@@ -20,11 +20,11 @@ public class PatientService {
                                    String familyNumber, String contactNumber) {
         
         // Null checker
-        if (firstName == null || firstName.isBlank() || lastName == null || lastName.isBlank()) {
+        if (firstName == null || firstName.trim().isEmpty() || lastName == null || lastName.trim().isEmpty()) {
             throw new IllegalArgumentException("First name and last name are required.");
         }
         
-        if (contactNumber == null || contactNumber.isBlank()) {
+        if (contactNumber == null || contactNumber.trim().isEmpty()) {
             throw new IllegalArgumentException("Contact number is required for appointment alerts.");
         }
 

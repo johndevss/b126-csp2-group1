@@ -47,7 +47,7 @@ public class AppointmentService {
 
     //Marks a patient as "arrived" when they present their code at the clinic desk.
     public boolean checkInPatient(String appointmentCode) {
-        if (appointmentCode == null || appointmentCode.isBlank()) {
+        if (appointmentCode == null || appointmentCode.trim().isEmpty()) {
             return false;
         }
 
