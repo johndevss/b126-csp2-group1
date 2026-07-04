@@ -4,6 +4,7 @@ import com.barangay_healthcare_appointment_system.config.DBConnection;
 import com.barangay_healthcare_appointment_system.model.User;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +100,36 @@ public class UserRepository {
         }
 
         return null; 
+    }
+
+    // Finds the doctor with the fewest active appointments on a given date.
+    public User findLeastBusyProvider(LocalDate date) {
+        String sql = "SELECT u.* FROM users u " +
+                "LEFT JOIN appointments a " +
+                "  ON a.assigned_to = u.id " +
+                "  AND a.appointment_date = ? " +
+                "  AND a.status IN ('pending', 'arrived') " +
+                "WHERE u.role = 'doctor' " +
+                "GROUP BY u.id " +
+                "ORDER BY COUNT(a.id) ASC " +
+                "LIMIT 1";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDate(1, Date.valueOf(date));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapRowToUser(rs);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("[UserRepository] Failed to find least busy provider: " + e.getMessage());
+        }
+
+        return null; // no doctors registered — nobody to assign
     }
 
     public User findByCredentials(String username, String password) {

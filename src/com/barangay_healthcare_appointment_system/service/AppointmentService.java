@@ -1,16 +1,20 @@
 package com.barangay_healthcare_appointment_system.service;
 
 import com.barangay_healthcare_appointment_system.model.Appointment;
+import com.barangay_healthcare_appointment_system.model.User;
 import com.barangay_healthcare_appointment_system.repository.AppointmentRepository;
+import com.barangay_healthcare_appointment_system.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.List;
 
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
+    private final UserRepository userRepository;
     private final ScheduleService scheduleService;
 
     public AppointmentService() {
         this.appointmentRepository = new AppointmentRepository();
+        this.userRepository = new UserRepository();
         this.scheduleService = new ScheduleService(); // Used to check day-of-week rules
     }
 
@@ -32,6 +36,11 @@ public class AppointmentService {
         // Generate tracking code for user
         String trackingCode = generateAppointmentCode(appointmentDate);
         appointment.setAppointmentCode(trackingCode);
+
+        User leastBusyDoctor = userRepository.findLeastBusyProvider(appointmentDate);
+        if (leastBusyDoctor != null) {
+            appointment.setAssignedTo(leastBusyDoctor.getId());
+        }
 
         // Save to database
         return appointmentRepository.save(appointment);
