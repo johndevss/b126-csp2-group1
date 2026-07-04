@@ -15,7 +15,7 @@ public class UserRepository {
 
     public User save(User user) {
         String sql = "INSERT INTO users (first_name, middle_name, last_name, username, password, role) " +
-                    "VALUES (?, ?, ?, ?, SHA2(?, 256), ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -24,7 +24,7 @@ public class UserRepository {
             stmt.setString(2, user.getMiddleName());
             stmt.setString(3, user.getLastName());
             stmt.setString(4, user.getUsername());
-            stmt.setString(5, user.getPassword()); // Pass the plain text; MySQL hashes it!
+            stmt.setString(5, user.getPassword());
             stmt.setString(6, user.getRole());
 
             stmt.executeUpdate();
@@ -102,7 +102,7 @@ public class UserRepository {
         return null; 
     }
 
-    // Finds the doctor with the fewest active appointments on a given date.
+    //Finds the doctor with the fewest active appointments on a given date.
     public User findLeastBusyProvider(LocalDate date) {
         String sql = "SELECT u.* FROM users u " +
                 "LEFT JOIN appointments a " +
